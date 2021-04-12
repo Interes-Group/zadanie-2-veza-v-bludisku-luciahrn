@@ -1,13 +1,13 @@
 package sk.stuba.fei.uim.oop;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 public class Game extends Canvas {
 
     private Tile[][] policka;
+    private Stack<Tile> backtrackStack=new Stack();
+    private Stack<Tile> helpStack=new Stack();
 
     public static final int BOARD_SIZE = 13;
     public Game() {
@@ -42,14 +42,22 @@ public class Game extends Canvas {
     public void randomizedDFS (Tile tile) {
         tile.setVisited(true);
         Tile next=randomUnvisitedNeigbour(tile);
-        while (Objects.nonNull(next)) {
-            connectCells(tile,next);
+        while (Objects.nonNull(next) ) {
+            helpStack.add(tile);
+            if (!helpStack.contains(next)) {
+
+                makeStack(tile);
+
+                connectCells(tile,next);
+            }
+
             randomizedDFS(next);
             next=randomUnvisitedNeigbour(tile);
         }
     }
 
     public Tile randomUnvisitedNeigbour(Tile tile) {
+
         Random rand = new Random();
         List <Tile> susedia=tile.getNeighbours();
         Tile randomSused=susedia.get(rand.nextInt(susedia.size()));
@@ -64,7 +72,8 @@ public class Game extends Canvas {
             }
         }
          if (pomocna_pocet==0) {
-             return null;
+
+             backtrack();
          }
 
         randomUnvisitedNeigbour(tile);
@@ -100,7 +109,36 @@ public class Game extends Canvas {
     }
 
     public void connectCells(Tile tile,Tile next) {
+
+
         System.out.println("spajam tile:"+tile.getX()+tile.getY()+" s next: "+next.getX()+next.getY());
+    }
+
+    public Stack makeStack(Tile tile) {
+
+        backtrackStack.add(tile);
+        return backtrackStack;
+    }
+
+    public void backtrack () {
+        if (!backtrackStack.isEmpty()) {
+            Tile posledny = backtrackStack.pop();
+            int pomocna_pocet = 0;
+            for (Tile pole : posledny.getNeighbours()) {
+
+                if (!pole.isVisited()) {
+
+                    randomizedDFS(posledny);
+                    pomocna_pocet++;
+                }
+            }
+            if (pomocna_pocet == 0) {
+
+                backtrack();
+            }
+        }
+
+
     }
 
 }
