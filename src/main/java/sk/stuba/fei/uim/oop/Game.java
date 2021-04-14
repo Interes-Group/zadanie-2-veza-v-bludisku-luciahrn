@@ -8,6 +8,7 @@ public class Game extends Canvas {
     private Tile[][] policka;
     private Stack<Tile> backtrackStack=new Stack();
     private Stack<Tile> helpStack=new Stack();
+    private Stack <Tile>nextStack=new Stack<>();
 
     public static final int BOARD_SIZE = 13;
     public Game() {
@@ -34,6 +35,7 @@ public class Game extends Canvas {
     public void makeMaze(Graphics g) {
 
         Tile start=this.policka[0][0];
+        nextStack.add(start);
         addTileNeighbours();
         randomizedDFS(start);
 
@@ -50,34 +52,36 @@ public class Game extends Canvas {
 
                 connectCells(tile,next);
             }
-
             randomizedDFS(next);
             next=randomUnvisitedNeigbour(tile);
+
         }
     }
 
     public Tile randomUnvisitedNeigbour(Tile tile) {
-
-        Random rand = new Random();
-        List <Tile> susedia=tile.getNeighbours();
-        Tile randomSused=susedia.get(rand.nextInt(susedia.size()));
-        if (!randomSused.isVisited()) {
-            return randomSused;
-        }
-        int pomocna_pocet=0;
-        for (Tile pole: tile.getNeighbours()) {
-
-            if (!pole.isVisited()) {
-                pomocna_pocet++;
+        if (nextStack.size()<169) {
+            Random rand = new Random();
+            List<Tile> susedia = tile.getNeighbours();
+            Tile randomSused = susedia.get(rand.nextInt(susedia.size()));
+            if (!randomSused.isVisited()) {
+                return randomSused;
             }
+            int pomocna_pocet = 0;
+            for (Tile pole : tile.getNeighbours()) {
+
+                if (!pole.isVisited()) {
+                    pomocna_pocet++;
+                }
+            }
+            if (pomocna_pocet == 0) {
+
+                backtrack();
+            }
+
+            randomUnvisitedNeigbour(tile);
+            return tile;
         }
-         if (pomocna_pocet==0) {
-
-             backtrack();
-         }
-
-        randomUnvisitedNeigbour(tile);
-        return tile;
+        return null;
     }
 
 
@@ -110,7 +114,7 @@ public class Game extends Canvas {
 
     public void connectCells(Tile tile,Tile next) {
 
-
+        nextStack.add(next);
         System.out.println("spajam tile:"+tile.getX()+tile.getY()+" s next: "+next.getX()+next.getY());
     }
 
@@ -140,5 +144,7 @@ public class Game extends Canvas {
 
 
     }
+
+
 
 }
