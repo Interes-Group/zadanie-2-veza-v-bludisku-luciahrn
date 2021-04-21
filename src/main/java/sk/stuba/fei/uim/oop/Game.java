@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+
 public class Game extends Canvas {
 
     private Tile[][] policka;
@@ -32,12 +33,15 @@ public class Game extends Canvas {
     }
 
 
-    public void makeMaze(Graphics g) {
+    public void makeMaze() {
 
         Tile start=this.policka[0][0];
         nextStack.add(start);
         addTileNeighbours();
         randomizedDFS(start);
+        Application canvas=new Application(policka,nextStack);
+        canvas.kresli();
+        findAvailable ();
 
     }
 
@@ -114,9 +118,45 @@ public class Game extends Canvas {
 
     public void connectCells(Tile tile,Tile next) {
 
+
         nextStack.add(next);
-        System.out.println("spajam tile:"+tile.getX()+tile.getY()+" s next: "+next.getX()+next.getY());
+
+        //steny
+        if (next.getY()==tile.getY()-1) {
+            tile.setHorna(false);
+            next.setDolna(false);
+
+
+        }
+        if (next.getY()==tile.getY()+1) {
+            tile.setDolna(false);
+            next.setHorna(false);
+
+
+
+
+        }
+        if (next.getX()==tile.getX()-1) {
+            tile.setLava(false);
+            next.setPrava(false);
+
+
+
+
+        }
+        if (next.getX()==tile.getX()+1) {
+            tile.setPrava(false);
+            next.setLava(false);
+
+
+
+
+        }
+
+
     }
+
+
 
     public Stack makeStack(Tile tile) {
 
@@ -145,6 +185,151 @@ public class Game extends Canvas {
 
     }
 
+    public void findAvailable () {
+        for (int i = 0; i < 13; i++) {
+            for (int j = 0; j < 13; j++) {
+                chceckIfAvailable(policka[i][j], i, j);
 
 
+
+
+            }
+        }
+
+
+    }
+
+    public void chceckIfAvailable(Tile tile,int i,int j) {
+        int k=0;
+        int l=0;
+        int counter=0;
+        //System.err.println("Tu som");
+
+        if (!tile.isDolna() ) {
+
+            counter=0;
+                k=i;
+                for (l = j; l < 13; l++) {
+                    //System.err.println("Tu som1");
+
+                    if (!policka[k][l].isHorna() && counter==0) {
+                        //System.err.println("Tu som2");
+                        tile.addAvailableTiles(policka[k][l]);
+                        //policka[k][l].addAvailableTiles(tile);
+                        //System.err.println("TILE:"+tile.getX()+tile.getY()+" ma suseda  "+policka[k][l].getX()+policka[k][l].getY());
+
+                    }
+                    if (policka[k][l].isHorna() && tile.getY()!=l) {
+                        //System.err.println("Tu som3");
+                        counter++;
+                    }
+                }
+
+        }
+
+        if (!tile.isHorna() ) {
+
+            counter=0;
+            k=i;
+            for (l = j; l >= 0;l-- ) {
+
+                if (!policka[k][l].isDolna() && counter==0) {
+                    tile.addAvailableTiles(policka[k][l]);
+                    //policka[k][l].addAvailableTiles(tile);
+                    //System.err.println("TILE:"+tile.getX()+tile.getY()+" ma suseda  "+policka[k][l].getX()+policka[k][l].getY());
+                }
+                if (policka[k][l].isDolna() && tile.getY()!=l) {
+                    counter++;
+                }
+            }
+
+        }
+
+        if (!tile.isLava() ) {
+            //System.err.println("Tu som5");
+            counter=0;
+            l=j;
+            for (k = i; k >= 0;k-- ) {
+                //System.err.println("Tu som6");
+                if (!policka[k][l].isPrava() && counter==0) {
+                    tile.addAvailableTiles(policka[k][l]);
+                    //policka[k][l].addAvailableTiles(tile);
+                    //System.err.println("TILE:"+tile.getX()+tile.getY()+" ma suseda  "+policka[k][l].getX()+policka[k][l].getY());
+                }
+                if (policka[k][l].isPrava() &&tile.getX()!=k) {
+                    counter++;
+                }
+            }
+
+        }
+
+        if (!tile.isPrava() ) {
+            //System.err.println("Tu som7");
+            counter=0;
+            l=j;
+            for (k = i; k <= 12;k++ ) {
+                //System.err.println("Tu som8");
+                if (!policka[k][l].isLava()&& counter==0) {
+                    tile.addAvailableTiles(policka[k][l]);
+                    //policka[k][l].addAvailableTiles(tile);
+                    //System.err.println("TILE:"+tile.getX()+tile.getY()+" ma suseda  "+policka[k][l].getX()+policka[k][l].getY());
+                }
+                if (policka[k][l].isLava() && tile.getX()!=k) {
+                    counter++;
+                }
+            }
+
+        }
+
+
+
+
+
+
+    }
+
+    /*public void chceckIfAvailable(Tile tile,int i,int j) {
+        for (Tile t: tile.getNeighbours()) {
+            while (!tile.isDolna()) {
+                if (!t.isHorna()) {
+                    policka[i][j].addAvailableTiles(t);
+                        chceckIfAvailable(t, i, j);
+
+
+                }
+
+            }
+            while (!tile.isHorna()) {
+                if (!t.isDolna()) {
+                    policka[i][j].addAvailableTiles(t);
+                    chceckIfAvailable(t, i, j);
+
+
+                }
+
+            }
+             while(!tile.isLava()) {
+                if (!t.isPrava()) {
+                    policka[i][j].addAvailableTiles(t);
+                    chceckIfAvailable(t, i, j);
+
+
+                }
+
+            }
+            while (!tile.isPrava()) {
+                if (!t.isLava()) {
+                    policka[i][j].addAvailableTiles(t);
+                    chceckIfAvailable(t, i, j);
+
+
+                }
+
+            }
+        }
+    }*/
+
+    public Stack<Tile> getNextStack() {
+        return nextStack;
+    }
 }
