@@ -44,6 +44,8 @@ public class MyButton extends JFrame implements ActionListener  {
         button4.addActionListener(this);
         button4.setText("D");
         this.myCanvas = myCanvas;
+        button5.addActionListener(this);
+        button5.setText("Refresh");
         button5.setBounds(370,200,60,30);
         //button6.setBounds(370,30,60,30);
         this.setTitle("Bludisko");
@@ -74,7 +76,7 @@ public class MyButton extends JFrame implements ActionListener  {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.err.println("****************************** ctionPerf");
+
 
         if (e.getSource()==button1) { //Up
             myCanvas.pressUp();
@@ -96,6 +98,12 @@ public class MyButton extends JFrame implements ActionListener  {
         }
         if (e.getSource()==button4) { //Down
             myCanvas.pressDown();
+
+        }
+        if (e.getSource()==button5) { //Down
+            myCanvas.refresh();
+            policka[12][12].setWin(0);
+            this.setFocusable(true);
 
         }
 
