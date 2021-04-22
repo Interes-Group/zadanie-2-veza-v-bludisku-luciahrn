@@ -19,6 +19,7 @@ public class MyButton extends JFrame implements ActionListener  {
     private int i;
     private int j;
     private int startCounter;
+    private MyCanvas myCanvas;
 
     MyButton(MyCanvas myCanvas,Tile[][] policka) {
 
@@ -36,27 +37,28 @@ public class MyButton extends JFrame implements ActionListener  {
         button2.setText("L");
         button3=new JButton();
         button3.setBounds(430,130,60,30);
-        button2.addActionListener(this);
+        button3.addActionListener(this);
         button3.setText("R");
         button4=new JButton();
         button4.setBounds(370,130,60,30);
         button4.addActionListener(this);
         button4.setText("D");
-
+        this.myCanvas = myCanvas;
         button5.setBounds(370,200,60,30);
-        button6.setBounds(370,30,60,30);
+        //button6.setBounds(370,30,60,30);
         this.setTitle("Bludisko");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.setResizable(false);
         //this.setLayout(null);
         this.setSize(700,500);
+        this.setFocusable(true);
         this.setVisible(true);
         this.add(button1); //UP
         this.add(button2);
         this.add(button3);
         this.add(button4);
         this.add(button5);
-        this.add(button6);
+        //this.add(button6);
 
 
     }
@@ -72,21 +74,10 @@ public class MyButton extends JFrame implements ActionListener  {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Tile t=new Tile();
-        if (startCounter==0) {
-            t = policka[i][j];
-            startCounter++;
-        }
+        System.err.println("****************************** ctionPerf");
 
         if (e.getSource()==button1) { //Up
-            for (Tile available:t.getAvailableTiles()) {
-                if (t.getX()==available.getX() && t.getY()-1==available.getY()) {
-                    System.out.println("tu som");
-
-                    kresli(getGraphics(),i,j-1);
-
-                }
-            }
+            myCanvas.pressUp();
 
 
 
@@ -96,41 +87,18 @@ public class MyButton extends JFrame implements ActionListener  {
         }
 
         if (e.getSource()==button2) { //Left
-            for (Tile available:t.getAvailableTiles()) {
-                if (t.getX()-1==available.getX() && t.getY()==available.getY()) {
-                    System.out.println("tu som");
-
-                    kresli(getGraphics(),i-1,j);
-                    t=available;
-
-                }
-            }
+            myCanvas.pressLeft();
 
         }
         if (e.getSource()==button3) { //Right
-            for (Tile available:t.getAvailableTiles()) {
-                if (t.getX()+1==available.getX() && t.getY()==available.getY()) {
-                    System.out.println("tu som");
-
-                    kresli(getGraphics(),i+1,j);
-                    t=available;
-
-                }
-            }
+        myCanvas.pressRight();
 
         }
         if (e.getSource()==button4) { //Down
-            for (Tile available:t.getAvailableTiles()) {
-                if (t.getX()==available.getX() && t.getY()+1==available.getY()) {
-                    System.out.println("tu som");
-
-                    kresli(getGraphics(),i,j+1);
-                    t=available;
-
-                }
-            }
+            myCanvas.pressDown();
 
         }
+
 
     }
 }

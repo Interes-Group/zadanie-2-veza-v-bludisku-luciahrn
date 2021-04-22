@@ -17,8 +17,16 @@ public  class Tile {
     private boolean dolna=true;
     private boolean prava=true;
     private boolean lava=true;
-    private boolean start,end,available,mouseclicked=false;
+    private boolean start,end,available,mouseclicked;
+    private int win;
 
+    public int getWin() {
+        return win;
+    }
+
+    public void setWin(int win) {
+        this.win = win;
+    }
 
     public Stack<Tile> getAvailableTiles() {
         return availableTiles;
