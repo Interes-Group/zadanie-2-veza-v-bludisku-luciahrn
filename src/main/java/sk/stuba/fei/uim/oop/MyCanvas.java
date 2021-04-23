@@ -97,7 +97,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
     }
 
     public void refresh() {
-        repaint();
+        //repaint();
         i=0;
         j=0;
         current=policka[0][0];

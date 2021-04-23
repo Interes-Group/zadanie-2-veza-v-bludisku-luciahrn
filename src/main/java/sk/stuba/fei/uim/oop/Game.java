@@ -33,7 +33,7 @@ public class Game  {
 
     public void startMaze() {
         makeMaze();
-        Application canvas=new Application(policka,nextStack);
+        AppBuilder canvas=new AppBuilder(policka,nextStack);
 
 
     }
@@ -45,7 +45,7 @@ public class Game  {
         nextStack.add(start);
         addTileNeighbours();
         randomizedDFS(start);
-        Application canvas=new Application(policka,nextStack);
+        AppBuilder canvas=new AppBuilder(policka,nextStack);
         canvas.kresli();
         findAvailable ();
 

@@ -7,13 +7,13 @@ import java.awt.*;
 
 import java.util.Stack;
 
-public class Application  {
+public class AppBuilder {
     private Tile[][] policka;
     private Stack<Tile> nextStack;
 
 
 
-    public Application(Tile[][] policka, Stack<Tile> nextStack) {
+    public AppBuilder(Tile[][] policka, Stack<Tile> nextStack) {
         this.policka = policka;
         this.nextStack= nextStack;
     }
