@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MyButton extends JFrame implements ActionListener  {
+public class Playground extends JFrame implements ActionListener  {
     private JButton button1;
     private JButton button2;
     private JButton button3;
@@ -15,7 +15,7 @@ public class MyButton extends JFrame implements ActionListener  {
     private Tile[][] policka;
     private MyCanvas myCanvas;
 
-    MyButton(MyCanvas myCanvas,Tile[][] policka) {
+    Playground(MyCanvas myCanvas, Tile[][] policka) {
 
         this.policka = policka;
         this.addKeyListener(myCanvas);
@@ -83,6 +83,7 @@ public class MyButton extends JFrame implements ActionListener  {
 
         }
         if (e.getSource()==button5) { //Down
+            this.setVisible(false);
             Game game=new Game();
             game.makeMaze();
             myCanvas.refresh();

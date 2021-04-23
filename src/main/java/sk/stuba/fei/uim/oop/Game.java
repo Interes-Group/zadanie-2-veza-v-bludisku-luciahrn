@@ -1,10 +1,10 @@
 package sk.stuba.fei.uim.oop;
-import java.awt.*;
+
 import java.util.*;
 import java.util.List;
 
 
-public class Game extends Canvas {
+public class Game  {
 
     private Tile[][] policka;
     private Stack<Tile> backtrackStack=new Stack();

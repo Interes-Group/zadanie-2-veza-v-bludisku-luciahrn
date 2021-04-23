@@ -1,6 +1,7 @@
 package sk.stuba.fei.uim.oop;
 
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -33,8 +34,6 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
     }
 
     public void paint(Graphics g) {
-
-
         g.setColor(Color.white);
         g.fillRect(0, 0, 300, 300);
         g.setColor(Color.gray);
@@ -145,7 +144,6 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
                 current=t;
                 makeAvailable(current, true);
                 if (t.getX() == 12 && t.getY() == 12) {
-
                     counterWins++;
                     policka[12][12].setWin(counterWins);
                     repaint();

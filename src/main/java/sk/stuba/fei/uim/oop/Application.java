@@ -28,7 +28,7 @@ public class Application  {
             menu.setBackground(Color.BLUE);
             menu.setBounds(300,60,200,240);
             MyCanvas canvas=new MyCanvas(policka,nextStack);
-            MyButton f=new MyButton(canvas,policka);
+            Playground f=new Playground(canvas,policka);
             f.add(menu);
             f.add(canvas);
 
