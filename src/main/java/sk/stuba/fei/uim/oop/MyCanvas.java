@@ -1,28 +1,24 @@
 package sk.stuba.fei.uim.oop;
-import lombok.SneakyThrows;
 
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.border.Border;
+
+
 
 public class MyCanvas extends Canvas  implements MouseListener, KeyListener,MouseMotionListener {
     private int counter;
     private int counterStart;
     private int i = 0;
     private int j = 0;
-    private int startCounter = 0;
+
     private int counterWins = 0;
-    private List<Point> vykreslene = new ArrayList();
 
 
-    private Tile[][] policka;;
+
+    private Tile[][] policka;
     private Stack<Tile> nextStack;
-    private Stack<Tile> availableTiles;
     private Tile current=new Tile();
 
 
@@ -37,8 +33,8 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
     }
 
     public void paint(Graphics g) {
-        // policka[12][12].setWin(counterWins);
-        Iterator<Tile> itr = nextStack.iterator();
+
+
         g.setColor(Color.white);
         g.fillRect(0, 0, 300, 300);
         g.setColor(Color.gray);
@@ -51,7 +47,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
         g.setColor(Color.black);
 
         for (Tile i : nextStack) {
-            //Thread.sleep(1000);
+
             if (i.isDolna()) {
 
 
@@ -86,9 +82,9 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
     }
 
 
-    public Tile paintAvailable(Tile tile, Graphics g) {
+    public void paintAvailable(Tile tile, Graphics g) {
         for (Tile t : tile.getAvailableTiles()) {
-            g.setColor(Color.blue);
+            g.setColor(Color.white);
 
             g.fillOval((t.getX() + 1) * 20, (t.getY() + 1) * 20, 20, 20);
 
@@ -96,9 +92,9 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
 
         g.setColor(Color.red);
         g.fillOval((tile.getX() + 1) * 20, (tile.getY() + 1) * 20, 20, 20);
+        kresliEnd(g);
 
 
-        return tile;
     }
 
     public void refresh() {
@@ -116,54 +112,29 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
         return policka[x][y];
     }
 
-    public void paintAll(Graphics g) {
-        for (int i = 0; i < 13; i++) {
-            for (int j = 0; j < 13; j++) {
-                Point p = null;
-                if (!policka[i][j].isAvailable() || !policka[i][j].isMouseclicked() || !policka[i][j].isStart() || !policka[i][j].isEnd()) {
-                    g.setColor(Color.white);
-                    g.fillOval((int) ((i + 1) * 20 + 20), (int) ((j + 1) * 20 + 20), 20, 20);
 
-                }
-                if (policka[i][j].isAvailable()) {
-                    g.setColor(Color.BLUE);
-                    g.fillOval((int) ((i + 1) * 20), (int) ((j + 1) * 20), 20, 20);
-                    p = new Point((int) ((i + 1) * 20 + 20), (int) ((j + 1) * 20 + 20));
-                }
-                if (policka[i][j].isMouseclicked()) {
-                    g.setColor(Color.red);
-                    g.fillOval((int) ((i + 1) * 20), (int) ((j + 1) * 20), 20, 20);
-
-                }
-
-                if(p != null){
-                    vykreslene.add(p);
-                }
-            }
-
-        }
-
-
-    }
 
     public void paintAllWhite(Graphics g) {
         for (int i = 0; i < 13; i++) {
             for (int j = 0; j < 13; j++) {
 
                 g.setColor(Color.white);
-                g.fillOval((int) ((i + 1) * 20 ), (int) ((j + 1) * 20 ), 20, 20);
+                g.fillOval( ((i + 1) * 20 ),  ((j + 1) * 20 ), 20, 20);
 
 
             }
 
         }
+        kresliEnd(g);
 
 
     }
 
     public void pressUp() {
+
         Tile t = policka[i][j];
         current=policka[i][j];
+        kresliMozneBielou(current,this.getGraphics());
         for (Tile available : t.getAvailableTiles()) {
 
             if (t.getX() == available.getX() && t.getY() - 1 == available.getY()) {
@@ -172,6 +143,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
                 j = j - 1;
                 t = available;
                 current=t;
+                makeAvailable(current, true);
                 if (t.getX() == 12 && t.getY() == 12) {
 
                     counterWins++;
@@ -192,6 +164,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
         Tile t;
         t = policka[i][j];
         current=policka[i][j];
+        kresliMozneBielou(current,this.getGraphics());
 
         for (Tile available : t.getAvailableTiles()) {
 
@@ -202,6 +175,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
                 j = j + 1;
                 t = available;
                 current=t;
+                makeAvailable(current, true);
                 if (t.getX() == 12 && t.getY() == 12) {
                     counterWins++;
                     policka[12][12].setWin(counterWins);
@@ -222,7 +196,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
     public void pressLeft() {
         Tile t = policka[i][j];
         current=policka[i][j];
-
+        kresliMozneBielou(current,this.getGraphics());
         for (Tile available : t.getAvailableTiles()) {
 
             if (t.getX() - 1 == available.getX() && t.getY() == available.getY()) {
@@ -233,6 +207,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
                 i = i - 1;
                 t = available;
                 current=t;
+                makeAvailable(current, true);
                 if (t.getX() == 12 && t.getY() == 12) {
                     counterWins++;
                     policka[12][12].setWin(counterWins);
@@ -251,6 +226,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
     public void pressRight() {
         Tile t = policka[i][j];
         current=policka[i][j];
+        kresliMozneBielou(current,this.getGraphics());
         for (Tile available : t.getAvailableTiles()) {
 
             if (t.getX() + 1 == available.getX() && t.getY() == available.getY()) {
@@ -261,6 +237,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
                 i = i + 1;
                 t = available;
                 current=t;
+                makeAvailable(current, true);
                 if (t.getX() == 12 && t.getY() == 12) {
                     counterWins++;
                     policka[12][12].setWin(counterWins);
@@ -287,6 +264,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
 
         g.setColor(Color.red);
         g.fillOval((x + 1) * 20, (y + 1) * 20, 20, 20);
+        kresliEnd(this.getGraphics());
 
 
     }
@@ -303,51 +281,50 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
 
 
         Point p = e.getPoint();
-        //Tile current = new Tile();
-        Tile start=policka[i][j];
 
-        if (counter == 0 && counterStart == 0 && p.getX() <= ((current.getX() + 1) * 20 + 20) && p.getX() >= (current.getX() + 1) * 20 && p.getY() <= (current.getY() + 1) * 20 + 20 && p.getY() >= (current.getY() + 1) * 20) {
-
-
-            current = start;
-            current = currentPosition(this.getGraphics(), current.getX(), current.getY());
-
-            makeAvailable(current, true);
-            counterStart++;
-            counter++;
-            paintAvailable(current,this.getGraphics());
-        }
+        current=policka[i][j];
+        if ((p.getX() - 20) / 20 >= 0 && (p.getX() - 20) / 20 <= 13 && (p.getY() - 20) / 20 >= 0 && (p.getY() - 20) / 20 <= 13) {
+            if (counter == 0 && counterStart == 0 && p.getX() <= ((current.getX() + 1) * 20 + 20) && p.getX() >= (current.getX() + 1) * 20 && p.getY() <= (current.getY() + 1) * 20 + 20 && p.getY() >= (current.getY() + 1) * 20) {
 
 
+                kresliEnd(this.getGraphics());
+                current = currentPosition(this.getGraphics(), current.getX(), current.getY());
+
+                makeAvailable(current, true);
+                counterStart++;
+                counter++;
+                paintAvailable(current, this.getGraphics());
+            }
 
 
+            if (policka[(int) (p.getX() - 20) / 20][(int) (p.getY() - 20) / 20].isAvailable() || counter >= 1 && p.getX() <= ((current.getX() + 1) * 20 + 20) && p.getX() >= (current.getX() + 1) * 20 && p.getY() <= (current.getY() + 1) * 20 + 20 && p.getY() >= (current.getY() + 1) * 20) {
+                kresliEnd(this.getGraphics());
+                makeAvailable(current, false);
+                current = policka[(int) (p.getX() - 20) / 20][(int) (p.getY() - 20) / 20];
+                i = (int) (p.getX() - 20) / 20;
+                j = (int) (p.getY() - 20) / 20;
 
-        if (counter > 1 && policka[(int) (p.getX() - 20) / 20][(int) (p.getY() - 20) / 20].isAvailable() || counter >= 1 && p.getX() <= ((current.getX() + 1) * 20 + 20) && p.getX() >= (current.getX() + 1) * 20 && p.getY() <= (current.getY() + 1) * 20 + 20 && p.getY() >= (current.getY() + 1) * 20) {
-            makeAvailable(current, false);
-            current = policka[(int) (p.getX() - 20) / 20][(int) (p.getY() - 20) / 20];
-            i=(int) (p.getX() - 20) / 20;
-            j=(int) (p.getY() - 20) / 20;
-            System.out.println(current.getX()+"  "+ current.getY());
 
-            makeAvailable(current, true);
+                makeAvailable(current, true);
 
-            paintAllWhite(this.getGraphics());
-            kresliEnd(this.getGraphics());
-            //current = currentPosition(this.getGraphics(), current.getX(), current.getY());
+                paintAllWhite(this.getGraphics());
+                kresliEnd(this.getGraphics());
+                //current = currentPosition(this.getGraphics(), current.getX(), current.getY());
 
-            paintAvailable(current,this.getGraphics());
-            paintRedPoint(current,this.getGraphics());
-            counter++;
-        }
-        if (policka[12][12].equals(current)) {
-            counterWins++;
-            policka[12][12].setWin(counterWins);
-            current=policka[0][0];
-            i=0;
-            j=0;
+                paintAvailable(current, this.getGraphics());
+                paintRedPoint(current, this.getGraphics());
+                counter++;
+            }
+            if (policka[12][12].equals(current)) {
+                counterWins++;
+                policka[12][12].setWin(counterWins);
+                current = policka[0][0];
+                i = 0;
+                j = 0;
 
-            repaint();
+                repaint();
 
+            }
         }
     }
 
@@ -415,19 +392,30 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        counter=0;
+        counterStart=0;
         Point p = e.getPoint();
-        Tile tile = new Tile();
-        if ((p.getX() - 20) / 20 >= 0 && (p.getX() - 20) / 20 <= 12 && (p.getY() - 20) / 20 >= 0 && (p.getY() - 20) / 20 <= 12) {
-
+        Tile tile ;
+        if ((p.getX() - 20) / 20 >= 0 && (p.getX() - 20) / 20 <= 13 && (p.getY() - 20) / 20 >= 0 && (p.getY() - 20) / 20 <= 13) {
+            if(((p.getY() - 20) / 20) == 13 || ((p.getX() - 20) / 20) == 13 ) {
+                //out of playground, do nothing
+                return;
+            }
             if (policka[(int) (p.getX() - 20) / 20][(int) (p.getY() - 20) / 20].isAvailable()) {
 
                 tile = policka[(int) (p.getX() - 20) / 20][(int) (p.getY() - 20) / 20];
                 kresliMozne(tile, this.getGraphics());
+                kresliEnd(this.getGraphics());
+
+
             }
             if (!policka[(int) (p.getX() - 20) / 20][(int) (p.getY() - 20) / 20].isAvailable()) {
-                System.out.println("+tu som");
+                kresliMozneBielou(current,this.getGraphics());
+                kresliEnd(this.getGraphics());
 
                 paintAvailable(current, this.getGraphics());
+                paintRedPoint(current,this.getGraphics());
+                kresliEnd(this.getGraphics());
             }
 
 
@@ -440,17 +428,40 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
 
 
         public  void kresliMozne(Tile tile,Graphics g) {
+
             for (Tile t : current.getAvailableTiles()) {
+
                 if (tile.equals(t)) {
                     g.setColor(Color.green);
 
                     g.fillOval((t.getX() + 1) * 20, (t.getY() + 1) * 20, 20, 20);
+                    kresliEnd(g);
+                    paintRedPoint(current,g);
                 }
 
             }
 
 
         }
+
+    public  void kresliMozneBielou(Tile tile,Graphics g) {
+
+        for (Tile t : current.getAvailableTiles()) {
+
+            if (tile.equals(t)) {
+                g.setColor(Color.white);
+
+                g.fillOval((t.getX() + 1) * 20, (t.getY() + 1) * 20, 20, 20);
+                kresliEnd(g);
+                paintRedPoint(current,g);
+            }
+
+        }
+
+
+    }
+
+
 
     }
 

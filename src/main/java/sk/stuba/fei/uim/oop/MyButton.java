@@ -1,36 +1,29 @@
 package sk.stuba.fei.uim.oop;
 import javax.swing.*;
-import java.awt.*;
-import javax.swing.*;
+
 import javax.swing.JFrame;
-import javax.swing.border.Border;
-import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MyButton extends JFrame implements ActionListener  {
-    JButton button1;
-    JButton button2;
-    JButton button3;
-    JButton button4;
-    JButton button5=new JButton();
-    JButton button6=new JButton();
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
+    private JButton button5=new JButton();
     private Tile[][] policka;
-    private int i;
-    private int j;
-    private int startCounter;
     private MyCanvas myCanvas;
 
     MyButton(MyCanvas myCanvas,Tile[][] policka) {
 
         this.policka = policka;
         this.addKeyListener(myCanvas);
-        Border blackline = BorderFactory.createLineBorder(Color.black);
+
         button1=new JButton();
         button1.setText("U");
         button1.addActionListener(this);
         button1.setBounds(370,100,60,30);
-        //button1.setText(String.valueOf(Character.toChars(24)));
         button2=new JButton();
         button2.addActionListener(this);
         button2.setBounds(310,130,60,30);
@@ -45,9 +38,9 @@ public class MyButton extends JFrame implements ActionListener  {
         button4.setText("D");
         this.myCanvas = myCanvas;
         button5.addActionListener(this);
-        button5.setText("Refresh");
-        button5.setBounds(370,200,60,30);
-        //button6.setBounds(370,30,60,30);
+        button5.setText("Restart");
+        button5.setBounds(360,200,80,30);
+
         this.setTitle("Bludisko");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.setResizable(false);
@@ -60,18 +53,12 @@ public class MyButton extends JFrame implements ActionListener  {
         this.add(button3);
         this.add(button4);
         this.add(button5);
-        //this.add(button6);
 
-
-    }
-
-    public void kresli (Graphics g,int i,int j) {
-        Tile start=policka[0][0];
-        g.setColor(Color.red);
-        g.fillOval((i+1)*20,(j+1)*20,20,20);
 
 
     }
+
+
 
 
     @Override
@@ -80,11 +67,6 @@ public class MyButton extends JFrame implements ActionListener  {
 
         if (e.getSource()==button1) { //Up
             myCanvas.pressUp();
-
-
-
-
-
 
         }
 
@@ -101,6 +83,8 @@ public class MyButton extends JFrame implements ActionListener  {
 
         }
         if (e.getSource()==button5) { //Down
+            Game game=new Game();
+            game.makeMaze();
             myCanvas.refresh();
             policka[12][12].setWin(0);
             this.setFocusable(true);
