@@ -43,8 +43,7 @@ public class Playground extends JFrame implements ActionListener  {
 
         this.setTitle("Bludisko");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //this.setResizable(false);
-        //this.setLayout(null);
+
         this.setSize(700,500);
         this.setFocusable(true);
         this.setVisible(true);

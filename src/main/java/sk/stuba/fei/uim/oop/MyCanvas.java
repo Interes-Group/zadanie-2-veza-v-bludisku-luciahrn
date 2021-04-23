@@ -1,7 +1,7 @@
 package sk.stuba.fei.uim.oop;
 
 
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -307,7 +307,7 @@ public class MyCanvas extends Canvas  implements MouseListener, KeyListener,Mous
 
                 paintAllWhite(this.getGraphics());
                 kresliEnd(this.getGraphics());
-                //current = currentPosition(this.getGraphics(), current.getX(), current.getY());
+
 
                 paintAvailable(current, this.getGraphics());
                 paintRedPoint(current, this.getGraphics());
